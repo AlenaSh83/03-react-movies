@@ -7,7 +7,7 @@ import ErrorMessage from '../ErrorMessage/ErrorMessage';
 import MovieGrid from '../MovieGrid/MovieGrid';
 import MovieModal from '../MovieModal/MovieModal';
 
-import { fetchMoviesByQuery } from '../../services/tmdb-api';
+import { fetchMoviesByQuery } from '../../services/movieService';
 
 import type { Movie } from '../../types/movie';
 
