@@ -11,7 +11,6 @@ import { fetchMoviesByQuery } from '../../services/movieService';
 
 import type { Movie } from '../../types/movie';
 
-
 export default function App() {
   const [query, setQuery] = useState('');
   const [movies, setMovies] = useState<Movie[]>([]);
@@ -23,28 +22,28 @@ export default function App() {
     if (!query) return;
 
     const getMovies = async () => {
-    try {
-    setIsLoading(true);
-    setError(null);
-    const data = await fetchMoviesByQuery(query);
+      try {
+        setIsLoading(true);
+        setError(null);
+        const data = await fetchMoviesByQuery(query);
 
-   if (data.length === 0) {
-   toast.error('No movies found. Try another query.');
-   }
+        if (data.length === 0) {
+          toast.error('No movies found. Try another query.');
+        }
 
-   setMovies(data);
-} catch {  
-  setError('Something went wrong. Please try again.');
-} finally {
-  setIsLoading(false);
-}
+        setMovies(data);
+      } catch {
+        setError('Something went wrong. Please try again.');
+      } finally {
+        setIsLoading(false);
+      }
     };
 
     getMovies();
   }, [query]);
 
   const handleSearch = (newQuery: string) => {
-    if (newQuery === query) return; 
+    if (newQuery === query) return;
     setQuery(newQuery);
     setMovies([]);
   };
@@ -59,7 +58,8 @@ export default function App() {
 
   return (
     <div>
-      <SearchBar onSearch={handleSearch} />
+      <SearchBar onSubmit={handleSearch} />
+
 
       {isLoading && <Loader />}
       {error && <ErrorMessage message={error} />}
@@ -71,10 +71,11 @@ export default function App() {
         <MovieModal movie={selectedMovie} onClose={closeModal} />
       )}
 
-      <Toaster position="top-right" />
+      <Toaster position="top-right" /> {}
     </div>
   );
 }
+
 
 
 
