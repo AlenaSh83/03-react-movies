@@ -24,21 +24,23 @@ export default function App() {
     data: moviesData,
     isLoading,
     error,
-    isError
+    isError,
+    isSuccess
   } = useQuery({
     queryKey: ['movies', query, page],
     queryFn: () => fetchMoviesByQuery(query, page),
     enabled: !!query,
+    placeholderData: previousData => previousData,
   });
 
-  // Використовуємо useEffect для обробки успішних запитів
+  
   useEffect(() => {
-    if (moviesData && moviesData.results.length === 0) {
+    if (isSuccess && moviesData && moviesData.results.length === 0) {
       toast.error('No movies found. Try another query.');
     }
-  }, [moviesData]);
+  }, [isSuccess, moviesData]);
 
-  // Використовуємо useEffect для обробки помилок
+  
   useEffect(() => {
     if (isError) {
       toast.error('Something went wrong. Please try again.');
@@ -48,13 +50,13 @@ export default function App() {
   const movies = moviesData?.results || [];
   const totalPages = moviesData?.total_pages || 0;
 
-  const handleSearch = (newQuery: string) => {
+  const handleSubmit = (newQuery: string) => {
     if (newQuery === query) return;
     setQuery(newQuery);
     setPage(1);
   };
 
-  const handleSelectMovie = (movie: Movie) => {
+  const handleSelect = (movie: Movie) => {
     setSelectedMovie(movie);
   };
 
@@ -64,7 +66,7 @@ export default function App() {
 
   return (
     <div>
-      <SearchBar onSearch={handleSearch} />
+      <SearchBar onSubmit={handleSubmit} />
       
       {isLoading && <Loader />}
       {isError && <ErrorMessage message={error?.message || 'Something went wrong. Please try again.'} />}
@@ -72,7 +74,7 @@ export default function App() {
       {movies.length > 0 && (
         <MovieGrid
           movies={movies}
-          onSelectMovie={handleSelectMovie}
+          onSelect={handleSelect}
         />
       )}
 
@@ -101,7 +103,6 @@ export default function App() {
     </div>
   );
 }
-
 
 
 
